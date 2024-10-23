@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+// Node structure
+struct Node {
+ int key;
+ struct Node* left;
+ struct Node* right;
+};
+// Function to create a new node
+struct Node* createNode(int key) {
+ struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+ newNode->key = key;
+ newNode->left = newNode->right = NULL;
+ return newNode;
+}
+// Function to insert a node in the BST
+struct Node* insert(struct Node* node, int key) {
+ if (node == NULL) {
+ return createNode(key); // Create new node if root is NULL
+ }
+ if (key < node->key) {
+ node->left = insert(node->left, key); // Insert in the left subtree
+ } else if (key > node->key) {
+ node->right = insert(node->right, key); // Insert in the right subtree
+ }
+ return node;
+}
+// Preorder Traversal: Root -> Left -> Right
+void preorder(struct Node* root) {
+ if (root != NULL) {
+ printf("%d ", root->key); // Visit root
+ preorder(root->left); // Visit left subtree
+ preorder(root->right); // Visit right subtree
+ }
+}
+// Inorder Traversal: Left -> Root -> Right
+void inorder(struct Node* root) {
+ if (root != NULL) {
+ inorder(root->left); // Visit left subtree
+ printf("%d ", root->key); // Visit root
+ inorder(root->right); // Visit right subtree
+ }
+}
+// Postorder Traversal: Left -> Right -> Root
+void postorder(struct Node* root) {
+ if (root != NULL) {
+ postorder(root->left); // Visit left subtree
+ postorder(root->right); // Visit right subtree
+ printf("%d ", root->key); // Visit root
+ }
+}
+// Main function
+int main() {
+ struct Node* root = NULL;
+ // Inserting values into the BST
+ root = insert(root, 50);
+ root = insert(root, 30);
+ root = insert(root, 20);
+ root = insert(root, 40);
+ root = insert(root, 70);
+ root = insert(root, 60);
+ root = insert(root, 80);
+ printf("Preorder traversal: ");
+ preorder(root); // Preorder traversal
+ printf("\n");
+ printf("Inorder traversal: ");
+ inorder(root); // Inorder traversal
+ printf("\n");
+ printf("Postorder traversal: ");
+ postorder(root); // Postorder traversal
+ printf("\n");
+ return 0;
+}
