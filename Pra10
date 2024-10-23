@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+// Node structure
+struct Node {
+ int key;
+ struct Node* left;
+ struct Node* right;
+};
+// Function to create a new node
+struct Node* createNode(int key) {
+ struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+ newNode->key = key;
+ newNode->left = newNode->right = NULL;
+ return newNode;
+}
+// Function to insert a node in the BST
+struct Node* insert(struct Node* node, int key) {
+ if (node == NULL) {
+ return createNode(key); // Create new node if root is NULL
+ }
+ if (key < node->key) {
+ node->left = insert(node->left, key); // Insert in the left subtree
+ } else if (key > node->key) {
+ node->right = insert(node->right, key); // Insert in the right subtree
+ }
+ return node;
+}
+// Function to find the minimum value node (inorder successor)
+struct Node* minValueNode(struct Node* node) {
+ struct Node* current = node;
+ // Loop down to find the leftmost leaf
+ while (current && current->left != NULL) {
+ current = current->left;
+ }
+ return current;
+}
+// Function to delete a node in the BST
+struct Node* deleteNode(struct Node* root, int key) {
+ if (root == NULL) {
+ return root;
+ }
+ // Find the node to be deleted
+ if (key < root->key) {
+ root->left = deleteNode(root->left, key);
+ } else if (key > root->key) {
+ root->right = deleteNode(root->right, key);
+ } else {
+ // Node with one child or no child
+ if (root->left == NULL) {
+ struct Node* temp = root->right;
+ free(root);
+ return temp;
+ } else if (root->right == NULL) {
+ struct Node* temp = root->left;
+ free(root);
+ return temp;
+ }
+ // Node with two children: get the inorder successor
+ struct Node* temp = minValueNode(root->right);
+ root->key = temp->key; // Copy the inorder successor's value to this node
+ root->right = deleteNode(root->right, temp->key); // Delete the inorder 
+successor
+ }
+ return root;
+}
+// Inorder traversal (left-root-right)
+void inorder(struct Node* root) {
+ if (root != NULL) {
+ inorder(root->left);
+ printf("%d ", root->key);
+ inorder(root->right);
+ }
+}
+// Main function
+int main() {
+ struct Node* root = NULL;
+ // Inserting values into the BST
+ root = insert(root, 50);
+ root = insert(root, 30);
+ root = insert(root, 20);
+ root = insert(root, 40);
+ root = insert(root, 70);
+ root = insert(root, 60);
+ root = insert(root, 80);
+ printf("Inorder traversal after insertion: ");
+ inorder(root); // Should print: 20 30 40 50 60 70 80
+ printf("\n");
+ // Deleting a node
+ root = deleteNode(root, 20);
+ printf("Inorder traversal after deleting 20: ");
+ inorder(root); // Should print: 30 40 50 60 70 80
+ printf("\n");
+ root = deleteNode(root, 30);
+ printf("Inorder traversal after deleting 30: ");
+ inorder(root); // Should print: 40 50 60 70 80
+ printf("\n");
+ root = deleteNode(root, 50);
+ printf("Inorder traversal after deleting 50: ");
+ inorder(root); // Should print: 40 60 70 80
+ printf("\n");
+ return 0;
+}
