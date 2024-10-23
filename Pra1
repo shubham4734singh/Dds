@@ -1,0 +1,164 @@
+#include <stdio.h>
+
+#include <stdlib.h>
+
+#define MAX 100
+
+typedef struct Stack {
+
+ int items[MAX];
+
+ int top;
+
+} Stack;
+
+void createStack(Stack *s) {
+
+ s->top = -1;
+
+}
+
+int isFull(Stack *s) {
+
+ return s->top == MAX - 1;
+
+}
+
+int isEmpty(Stack *s) {
+
+ return s->top == -1;
+
+}
+
+void push(Stack *s, int item) {
+
+ if (isFull(s)) {
+
+ printf("Stack is full\n");
+
+ } else {
+
+ s->items[++s->top] = item;
+
+ printf("Item %d pushed to stack\n", item);
+
+ }
+
+}
+
+int pop(Stack *s) {
+
+ if (isEmpty(s)) {
+
+ printf("Stack is empty\n");
+
+ return -1;
+
+ } else {
+
+ int item = s->items[s->top--];
+
+ printf("Item %d popped from stack\n", item);
+
+ return item;
+
+ }
+
+}
+
+void traverse(Stack *s) {
+if (isEmpty(s)) {
+
+ printf("Stack is empty\n");
+
+ } else {
+
+ printf("Stack elements:\n");
+
+ for (int i = 0; i <= s->top; i++) {
+
+ printf("%d\n", s->items[i]);
+
+ }
+
+ }
+
+}
+
+int peek(Stack *s) {
+
+ if (isEmpty(s)) {
+
+ printf("Stack is empty\n");
+
+ return -1;
+
+ } else {
+
+ printf("Top element is %d\n", s->items[s->top]);
+
+ return s->items[s->top];
+
+ }
+
+}
+
+int search(Stack *s, int item) {
+
+ for (int i = 0; i <= s->top; i++) {
+
+ if (s->items[i] == item) {
+
+ printf("Item %d found at position %d\n", item, i);
+
+ return i;
+
+ }
+
+ }
+
+ printf("Item %d not found in stack\n", item);
+
+ return -1;
+
+}
+
+int main() {
+
+ Stack s;
+
+ createStack(&s);
+
+ 
+
+ push(&s, 1);
+
+ push(&s, 2);
+
+ push(&s, 3);
+
+ traverse(&s);
+
+ peek(&s);
+
+ pop(&s);
+
+ traverse(&s);
+
+ search(&s, 2);
+
+ search(&s, 4);
+
+pop(&s);
+
+ pop(&s);
+
+ pop(&s);
+
+ traverse(&s);
+
+ 
+
+ return 0;
+
+}
